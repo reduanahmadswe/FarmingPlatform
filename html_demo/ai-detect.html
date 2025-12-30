@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>AI Detection - Fosoler Khoj</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: { 
+                    fontFamily: { sans: ['Poppins', 'sans-serif'] },
+                    colors: { brand: { dark: '#1A4D2E', light: '#4F772D', accent: '#F9C74F', bg: '#F3F8F2' } } 
+                }
+            }
+        }
+    </script>
+</head>
+<body class="bg-gray-50 font-sans">
+    <header class="bg-white shadow-sm fixed w-full top-0 z-50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center h-16">
+                <div class="flex-shrink-0 flex items-center cursor-pointer" onclick="window.location.href='dashboard.html'">
+                    <img src="logo.jpeg" onerror="this.src='https://via.placeholder.com/40?text=FK'" class="h-10 w-auto mr-2" alt="Logo">
+                    <span class="font-bold text-xl text-brand-dark tracking-tight">Fosoler Khoj</span>
+                </div>
+                
+                <nav class="hidden md:flex space-x-8">
+                    <a href="community.html" class="text-gray-500 hover:text-brand-dark px-3 py-2 text-sm font-medium flex items-center transition"><i class="fas fa-users mr-2"></i> Community</a>
+                    <a href="marketplace.html" class="text-gray-500 hover:text-brand-dark px-3 py-2 text-sm font-medium flex items-center transition"><i class="fas fa-store mr-2"></i> Marketplace</a>
+                    <a href="iot.html" class="text-gray-500 hover:text-brand-dark px-3 py-2 text-sm font-medium flex items-center transition"><i class="fas fa-tint mr-2"></i> IoT</a>
+                    
+                    <a href="ai-detect.html" class="text-brand-dark font-bold px-3 py-2 text-sm flex items-center border-b-2 border-brand-dark"><i class="fas fa-microscope mr-2"></i> AI Detect</a>
+                </nav>
+                
+                <div class="hidden md:flex items-center space-x-4">
+                    <a href="index.html" class="text-gray-600 hover:text-red-600 font-medium text-sm transition">Log Out</a>
+                    <a href="dashboard.html" class="group flex items-center space-x-2 cursor-pointer bg-brand-bg px-3 py-1.5 rounded-full hover:bg-green-100 transition" title="Go to Profile">
+                        <span class="text-xs font-bold text-brand-dark hidden lg:block">My Profile</span>
+                        <div class="h-8 w-8 bg-brand-light rounded-full flex items-center justify-center text-white text-xs font-bold shadow-sm group-hover:scale-110 transition-transform">RM</div>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <main class="pt-24 pb-12 flex flex-col items-center min-h-screen">
+        <div class="w-full max-w-2xl bg-white p-10 rounded-2xl shadow-sm border border-gray-100">
+            <h2 class="text-2xl font-bold mb-4 text-brand-dark flex items-center"><i class="fas fa-magic mr-3"></i>Crop Disease Doctor</h2>
+            <p class="mb-8 text-gray-600">Upload a clear photo of the affected leaf to detect diseases instantly.</p>
+            
+            <div class="border-2 border-dashed border-gray-300 rounded-xl p-12 text-center hover:bg-gray-50 transition cursor-pointer group" onclick="document.getElementById('fileInput').click()">
+                <div class="h-16 w-16 bg-gray-100 rounded-full flex items-center justify-center mx-auto mb-4 group-hover:bg-white transition">
+                    <i class="fas fa-cloud-upload-alt text-3xl text-gray-400 group-hover:text-brand-dark"></i>
+                </div>
+                <p class="font-semibold text-gray-700">Click to upload or drag image</p>
+                <p class="text-xs text-gray-400 mt-2">Supports JPG, PNG</p>
+                <input type="file" class="hidden" id="fileInput" onchange="showScan()">
+            </div>
+
+            <div id="resultArea" class="hidden mt-8 border-t pt-6 animate-pulse">
+                <div class="flex items-start space-x-4 bg-red-50 p-5 rounded-xl border border-red-100">
+                    <div class="bg-white p-2 rounded-full text-red-600 shadow-sm"><i class="fas fa-exclamation-triangle text-xl"></i></div>
+                    <div>
+                        <h3 class="font-bold text-lg text-red-700">Leaf Blight Detected</h3>
+                        <p class="text-xs text-gray-500 font-bold tracking-wide uppercase mb-2">Confidence: 92%</p>
+                        <div class="mt-2 text-sm text-gray-700">
+                            <span class="font-bold">Solution:</span> Apply Copper Oxychloride 50 WP (3g/liter water) every 7 days.
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <button onclick="document.getElementById('fileInput').click()" class="mt-8 w-full bg-brand-dark text-white py-3 rounded-lg font-bold hover:bg-green-800 transition shadow">Select Image</button>
+        </div>
+    </main>
+
+    <script>
+        function showScan() {
+            const btn = document.querySelector('button');
+            const result = document.getElementById('resultArea');
+            btn.innerText = "Analyzing...";
+            btn.classList.add('opacity-75', 'cursor-wait');
+            
+            setTimeout(() => {
+                result.classList.remove('hidden');
+                result.classList.remove('animate-pulse'); // Stop pulsing after load
+                btn.innerText = "Select Another Image";
+                btn.classList.remove('opacity-75', 'cursor-wait');
+            }, 1500);
+        }
+    </script>
+</body>
+</html>

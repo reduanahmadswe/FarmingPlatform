@@ -1,0 +1,251 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Marketplace - Fosoler Khoj</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: { 
+                    fontFamily: { sans: ['Poppins', 'sans-serif'] },
+                    colors: { brand: { dark: '#1A4D2E', light: '#4F772D', accent: '#F9C74F', bg: '#F3F8F2' } } 
+                }
+            }
+        }
+    </script>
+</head>
+<body class="bg-gray-50 font-sans">
+    
+    <header class="bg-white shadow-sm fixed w-full top-0 z-50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center h-16">
+                <div class="flex-shrink-0 flex items-center cursor-pointer" onclick="window.location.href='dashboard.html'">
+                    <img src="logo.jpeg" onerror="this.src='https://via.placeholder.com/40?text=FK'" class="h-10 w-auto mr-2" alt="Logo">
+                    <span class="font-bold text-xl text-brand-dark tracking-tight">Fosoler Khoj</span>
+                </div>
+                <nav class="hidden md:flex space-x-8">
+                    <a href="community.html" class="text-gray-500 hover:text-brand-dark px-3 py-2 text-sm font-medium flex items-center transition"><i class="fas fa-users mr-2"></i> Community</a>
+                    <a href="marketplace.html" class="text-brand-dark font-bold px-3 py-2 text-sm flex items-center border-b-2 border-brand-dark"><i class="fas fa-store mr-2"></i> Marketplace</a>
+                    <a href="iot.html" class="text-gray-500 hover:text-brand-dark px-3 py-2 text-sm font-medium flex items-center transition"><i class="fas fa-tint mr-2"></i> IoT</a>
+                    <a href="ai-detect.html" class="text-gray-500 hover:text-brand-dark px-3 py-2 text-sm font-medium flex items-center transition"><i class="fas fa-microscope mr-2"></i> AI Detect</a>
+                </nav>
+                <div class="hidden md:flex items-center space-x-4">
+                    <a href="index.html" class="text-gray-600 hover:text-red-600 font-medium text-sm transition">Log Out</a>
+                    <a href="dashboard.html" class="group flex items-center space-x-2 cursor-pointer bg-brand-bg px-3 py-1.5 rounded-full hover:bg-green-100 transition border border-green-200">
+                        <span class="text-xs font-bold text-brand-dark hidden lg:block">My Profile</span>
+                        <div class="h-8 w-8 bg-brand-light rounded-full flex items-center justify-center text-white text-xs font-bold shadow-sm">RM</div>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <main class="pt-24 pb-12 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="flex justify-between items-center mb-6">
+            <h2 class="text-2xl font-bold text-gray-800">My Listings</h2>
+            <button onclick="openModalForAdd()" class="bg-brand-dark text-white px-5 py-2 rounded-full shadow hover:bg-brand-light transition text-sm font-semibold">
+                <i class="fas fa-plus mr-2"></i>Add Crop
+            </button>
+        </div>
+
+        <div id="cropGrid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            </div>
+    </main>
+
+    <div id="addModal" class="fixed inset-0 bg-gray-900 bg-opacity-50 hidden flex items-center justify-center z-50 backdrop-blur-sm">
+        <div class="bg-white rounded-xl shadow-2xl p-6 w-full max-w-md mx-4 animate-bounce-in">
+            <div class="flex justify-between items-center mb-4">
+                <h3 id="modalTitle" class="text-xl font-bold text-brand-dark">Add New Crop</h3>
+                <button onclick="closeModal()" class="text-gray-400 hover:text-red-500"><i class="fas fa-times text-xl"></i></button>
+            </div>
+            
+            <form onsubmit="event.preventDefault(); saveCrop();">
+                <input type="hidden" id="editIndex" value="-1">
+
+                <div class="mb-4">
+                    <label class="block text-sm font-bold text-gray-700 mb-1">Crop Name</label>
+                    <select id="cropName" class="w-full border rounded-lg px-3 py-2 focus:ring-brand-dark focus:border-brand-dark">
+                        <option>Organic Rice</option>
+                        <option>Fresh Tomato</option>
+                        <option>Potato (Alu)</option>
+                        <option>Wheat (Gom)</option>
+                        <option>Onion (Peyaj)</option>
+                        <option>Mustard (Shorisha)</option>
+                        <option>Green Chili</option>
+                    </select>
+                </div>
+                <div class="flex space-x-4 mb-4">
+                    <div class="w-1/2">
+                        <label class="block text-sm font-bold text-gray-700 mb-1">Quantity (KG)</label>
+                        <input type="number" id="cropQty" placeholder="500" class="w-full border rounded-lg px-3 py-2" required>
+                    </div>
+                    <div class="w-1/2">
+                        <label class="block text-sm font-bold text-gray-700 mb-1">Price per KG (৳)</label>
+                        <input type="number" id="cropPrice" placeholder="60" class="w-full border rounded-lg px-3 py-2" required>
+                    </div>
+                </div>
+                
+                <div class="mb-5 flex items-center">
+                    <input type="checkbox" id="shareToFeed" class="w-4 h-4 text-brand-dark rounded border-gray-300 focus:ring-brand-light">
+                    <label for="shareToFeed" class="ml-2 text-sm text-gray-700 font-medium">Share update to Community Feed?</label>
+                </div>
+
+                <button type="submit" id="submitBtn" class="w-full bg-brand-dark text-white font-bold py-3 rounded-lg hover:bg-green-800 transition">Publish Listing</button>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        const defaultCrops = [
+            { name: 'Organic Rice', qty: 500, price: 65, icon: 'fa-seedling', color: 'yellow' },
+            { name: 'Fresh Tomato', qty: 200, price: 40, icon: 'fa-apple-alt', color: 'red' }
+        ];
+
+        function loadCrops() {
+            const storedData = localStorage.getItem('myCrops');
+            const crops = storedData ? JSON.parse(storedData) : defaultCrops;
+            const grid = document.getElementById('cropGrid');
+            grid.innerHTML = '';
+
+            // Note: We use index (i) to identify which card to edit
+            crops.forEach((crop, i) => {
+                const card = `
+                    <div class="bg-white rounded-xl shadow-sm overflow-hidden border border-gray-100 relative group hover:shadow-md transition">
+                        <div class="h-40 bg-${crop.color}-50 flex items-center justify-center">
+                            <i class="fas ${crop.icon} text-5xl text-${crop.color}-500"></i>
+                        </div>
+                        <div class="p-5">
+                            <h3 class="font-bold text-lg text-gray-800">${crop.name}</h3>
+                            <p class="text-sm text-gray-500 mb-4">Stock: ${crop.qty} KG</p>
+                            <div class="flex justify-between items-center">
+                                <span class="text-xl font-bold text-brand-dark">৳ ${crop.price}/kg</span>
+                                <div class="space-x-2">
+                                    <button onclick="editCrop(${i})" class="text-brand-light font-semibold hover:underline text-sm"><i class="fas fa-edit"></i> Edit</button>
+                                    <button onclick="deleteCrop(${i})" class="text-red-400 font-semibold hover:text-red-600 text-sm"><i class="fas fa-trash"></i></button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                `;
+                grid.innerHTML += card;
+            });
+        }
+
+        // --- NEW: EDIT FUNCTION ---
+        function editCrop(index) {
+            const storedData = localStorage.getItem('myCrops');
+            const crops = storedData ? JSON.parse(storedData) : defaultCrops;
+            const crop = crops[index];
+
+            // Fill form with existing data
+            document.getElementById('cropName').value = crop.name;
+            document.getElementById('cropQty').value = crop.qty;
+            document.getElementById('cropPrice').value = crop.price;
+            
+            // Set Edit Mode
+            document.getElementById('editIndex').value = index; 
+            document.getElementById('modalTitle').innerText = "Edit Crop Details";
+            document.getElementById('submitBtn').innerText = "Update Listing";
+            document.getElementById('shareToFeed').checked = false; // Uncheck by default on edit
+
+            // Open Modal
+            document.getElementById('addModal').classList.remove('hidden');
+        }
+
+        // --- OPEN FOR ADDING (RESET FORM) ---
+        function openModalForAdd() {
+            document.getElementById('addModal').classList.remove('hidden');
+            document.getElementById('editIndex').value = "-1"; // -1 means New Crop
+            document.getElementById('modalTitle').innerText = "Add New Crop";
+            document.getElementById('submitBtn').innerText = "Publish Listing";
+            
+            // Clear inputs
+            document.getElementById('cropQty').value = '';
+            document.getElementById('cropPrice').value = '';
+            document.getElementById('shareToFeed').checked = true; // Default check for new
+        }
+
+        function closeModal() { document.getElementById('addModal').classList.add('hidden'); }
+
+        // --- SAVE FUNCTION (HANDLES BOTH ADD & EDIT) ---
+        function saveCrop() {
+            const index = parseInt(document.getElementById('editIndex').value);
+            const name = document.getElementById('cropName').value;
+            const qty = document.getElementById('cropQty').value;
+            const price = document.getElementById('cropPrice').value;
+            const shareToFeed = document.getElementById('shareToFeed').checked;
+
+            // Icon Logic
+            let icon = 'fa-leaf';
+            let color = 'green';
+            if(name.includes('Rice')) { icon = 'fa-seedling'; color = 'yellow'; }
+            else if(name.includes('Tomato')) { icon = 'fa-apple-alt'; color = 'red'; }
+            else if(name.includes('Potato')) { icon = 'fa-cookie'; color = 'orange'; }
+            else if(name.includes('Onion')) { icon = 'fa-feather-alt'; color = 'purple'; }
+            else if(name.includes('Chili')) { icon = 'fa-pepper-hot'; color = 'red'; }
+
+            const cropData = { name, qty, price, icon, color };
+            
+            let crops = JSON.parse(localStorage.getItem('myCrops')) || defaultCrops;
+
+            if (index === -1) {
+                // ADD NEW
+                crops.push(cropData);
+                alert("Listing Published!");
+            } else {
+                // UPDATE EXISTING
+                crops[index] = cropData;
+                alert("Listing Updated!");
+            }
+
+            localStorage.setItem('myCrops', JSON.stringify(crops));
+
+            // AUTO-POST LOGIC (Optional)
+            if (shareToFeed) {
+                const savedProfile = localStorage.getItem('userProfile');
+                const userData = savedProfile ? JSON.parse(savedProfile) : { name: "Rahim Mia" };
+                const initials = userData.name.split(' ').map(n => n[0]).join('').substring(0, 2).toUpperCase();
+
+                const actionText = index === -1 ? "নতুন বিক্রয় বিজ্ঞপ্তি!" : "আপডেট বিজ্ঞপ্তি!";
+                const postText = `📢 ${actionText} \nআমি ${qty} কেজি "${name}" বিক্রি করছি। \nদাম: ৳${price}/কেজি। \nকারও প্রয়োজন হলে যোগাযোগ করুন।`;
+
+                const marketPost = {
+                    id: Date.now(),
+                    user: userData.name,
+                    role: "Farmer",
+                    initial: initials,
+                    color: "green",
+                    time: "Just now",
+                    text: postText,
+                    likes: 0,
+                    comments: 0,
+                    mediaType: null
+                };
+
+                let communityPosts = JSON.parse(localStorage.getItem('communityPosts')) || [];
+                communityPosts.unshift(marketPost);
+                localStorage.setItem('communityPosts', JSON.stringify(communityPosts));
+            }
+
+            loadCrops();
+            closeModal();
+        }
+
+        // --- DELETE FUNCTION ---
+        function deleteCrop(index) {
+            if(confirm("Are you sure you want to delete this listing?")) {
+                let crops = JSON.parse(localStorage.getItem('myCrops')) || defaultCrops;
+                crops.splice(index, 1); // Remove item at index
+                localStorage.setItem('myCrops', JSON.stringify(crops));
+                loadCrops();
+            }
+        }
+
+        loadCrops();
+    </script>
+    <style>.animate-bounce-in { animation: bounceIn 0.5s; } @keyframes bounceIn { 0% { transform: scale(0.8); opacity: 0; } 100% { transform: scale(1); opacity: 1; } }</style>
+</body>
+</html>
