@@ -36,7 +36,7 @@ const Community: React.FC = () => {
 
     const fetchPosts = async () => {
         try {
-            const res = await fetch('http://localhost:5000/api/posts');
+            const res = await fetch(`${import.meta.env.VITE_API_BASE_URL}/api/posts`);
             const data = await res.json();
             // Transform _id to id if needed, or backend should handle it. Assuming backend returns array.
             setPosts(data.map((p: any) => ({ ...p, id: p._id })));
@@ -154,7 +154,7 @@ const Community: React.FC = () => {
         setPosts(updatedPosts);
 
         try {
-            await fetch(`http://localhost:5000/api/posts/${id}/like`, {
+            await fetch(`${import.meta.env.VITE_API_BASE_URL}/api/posts/${id}/like`, {
                 method: 'PUT',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ userId: currentUser.name, type })
@@ -167,7 +167,7 @@ const Community: React.FC = () => {
 
     const addComment = async (id: string, text: string) => {
         try {
-            const res = await fetch(`http://localhost:5000/api/posts/${id}/comment`, {
+            const res = await fetch(`${import.meta.env.VITE_API_BASE_URL}/api/posts/${id}/comment`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ user: currentUser.name, text, userAvatar: currentUser.initials })
@@ -182,7 +182,7 @@ const Community: React.FC = () => {
 
     const handleReply = async (postId: string, commentId: string, replyToId: string, text: string) => {
         try {
-            const res = await fetch(`http://localhost:5000/api/posts/${postId}/comments/${commentId}/reply`, {
+            const res = await fetch(`${import.meta.env.VITE_API_BASE_URL}/api/posts/${postId}/comments/${commentId}/reply`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ user: currentUser.name, text, userAvatar: currentUser.initials, replyToId })
@@ -195,7 +195,7 @@ const Community: React.FC = () => {
 
     const handleCommentReaction = async (postId: string, commentId: string, type: string) => {
         try {
-            const res = await fetch(`http://localhost:5000/api/posts/${postId}/comments/${commentId}/react`, {
+            const res = await fetch(`${import.meta.env.VITE_API_BASE_URL}/api/posts/${postId}/comments/${commentId}/react`, {
                 method: 'PUT',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ userId: currentUser.name, type })
@@ -208,7 +208,7 @@ const Community: React.FC = () => {
 
     const handleShare = async (postId: string, text?: string) => {
         try {
-            const res = await fetch(`http://localhost:5000/api/posts/${postId}/share`, {
+            const res = await fetch(`${import.meta.env.VITE_API_BASE_URL}/api/posts/${postId}/share`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({

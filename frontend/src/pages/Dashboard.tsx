@@ -1,3 +1,6 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
+/* eslint-disable prefer-const */
+/* eslint-disable @typescript-eslint/ban-ts-comment */
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import type { UserProfile, Post } from '../types';
@@ -40,7 +43,7 @@ const Dashboard: React.FC = () => {
 
     const loadMyPosts = async () => {
         try {
-            const res = await fetch('http://localhost:5000/api/posts');
+            const res = await fetch(`${import.meta.env.VITE_API_BASE_URL}/api/posts`);
             const data = await res.json();
             const allPosts: Post[] = data.map((p: any) => ({ ...p, id: p._id }));
 
@@ -97,7 +100,7 @@ const Dashboard: React.FC = () => {
             };
 
             // Call Backend API
-            const res = await fetch(`http://localhost:5000/api/auth/profile/${userProfile.id}`, {
+            const res = await fetch(`${import.meta.env.VITE_API_BASE_URL}/api/auth/profile/${userProfile.id}`, {
                 method: 'PUT',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify(updatedData)
@@ -159,7 +162,7 @@ const Dashboard: React.FC = () => {
         setMyPosts(updatedPosts);
 
         try {
-            await fetch(`http://localhost:5000/api/posts/${id}/like`, {
+            await fetch(`${import.meta.env.VITE_API_BASE_URL}/api/posts/${id}/like`, {
                 method: 'PUT',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ userId: userProfile.name, type })
@@ -174,7 +177,7 @@ const Dashboard: React.FC = () => {
 
     const addComment = async (id: string, text: string) => {
         try {
-            const res = await fetch(`http://localhost:5000/api/posts/${id}/comment`, {
+            const res = await fetch(`${import.meta.env.VITE_API_BASE_URL}/api/posts/${id}/comment`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ user: userProfile.name, text })
@@ -189,7 +192,7 @@ const Dashboard: React.FC = () => {
 
     const handleDeletePost = async (id: string | number) => {
         try {
-            await fetch(`http://localhost:5000/api/posts/${id}`, {
+            await fetch(`${import.meta.env.VITE_API_BASE_URL}/api/posts/${id}`, {
                 method: 'DELETE',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ user: userProfile.name })

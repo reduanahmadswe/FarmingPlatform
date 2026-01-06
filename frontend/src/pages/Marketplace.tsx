@@ -47,7 +47,7 @@ const Marketplace: React.FC = () => {
 
     const fetchCrops = async () => {
         try {
-            const res = await fetch('http://localhost:5000/api/marketplace');
+            const res = await fetch(`${import.meta.env.VITE_API_BASE_URL}/api/marketplace`);
             const data = await res.json();
             // Backend returns array of crops with _id
             setCrops(data.map((c: any) => ({ ...c, id: c._id })));
@@ -97,7 +97,7 @@ const Marketplace: React.FC = () => {
         const cropId = (crop as any).id || (crop as any)._id;
         if (!cropId) return;
         try {
-            await fetch(`http://localhost:5000/api/marketplace/${cropId}`, {
+            await fetch(`${import.meta.env.VITE_API_BASE_URL}/api/marketplace/${cropId}`, {
                 method: 'DELETE',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ user: currentUserName })
@@ -119,7 +119,7 @@ const Marketplace: React.FC = () => {
         const cropId = (crop as any).id || (crop as any)._id;
         if (!cropId) return;
         try {
-            await fetch(`http://localhost:5000/api/marketplace/${cropId}`, {
+            await fetch(`${import.meta.env.VITE_API_BASE_URL}/api/marketplace/${cropId}`, {
                 method: 'PUT',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ soldOut: !crop.soldOut })

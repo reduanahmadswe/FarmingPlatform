@@ -23,7 +23,7 @@ const AiDetect: React.FC = () => {
                 });
                 const dataUrl = await toDataUrl(file);
 
-                const resp = await fetch('http://localhost:5000/api/ai/detect', {
+                const resp = await fetch(`${import.meta.env.VITE_API_BASE_URL}/api/ai/detect`, {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({ image: dataUrl })
