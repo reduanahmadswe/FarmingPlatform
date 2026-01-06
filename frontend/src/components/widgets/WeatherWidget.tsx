@@ -46,12 +46,18 @@ const WeatherWidget: React.FC<WeatherWidgetProps> = ({ className = '', compact =
             let locationName = "Local Area";
             try {
                 const geoRes = await fetch(
-                    `https://nominatim.openstreetmap.org/reverse?format=json&lat=${latitude}&lon=${longitude}&zoom=10`
+                    `https://nominatim.openstreetmap.org/reverse?format=json&lat=${latitude}&lon=${longitude}&zoom=10`,
+                    {
+                        headers: {
+                            'User-Agent': 'FarmingPlatform/1.0'
+                        }
+                    }
                 );
                 const geoData = await geoRes.json();
-                locationName = geoData.address.city || geoData.address.town || geoData.address.village || "Unknown";
+                locationName = geoData.address?.city || geoData.address?.town || geoData.address?.village || geoData.address?.county || geoData.address?.state || "Local Area";
             } catch (e) {
-                // Ignore geo error
+                console.error("Reverse geocoding failed:", e);
+                locationName = "Local Area";
             }
 
             const current = weatherData.current;

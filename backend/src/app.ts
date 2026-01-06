@@ -3,6 +3,7 @@ import cors from "cors";
 import postRoutes from "./modules/post/post.routes";
 import marketRoutes from "./modules/marketplace/marketplace.routes";
 import iotRoutes from "./modules/iot/iot.routes";
+import aiRoutes from "./modules/ai/ai.routes";
 import authRoutes from "./modules/auth/auth.routes";
 import weatherRoutes from "./modules/weather/weather.routes";
 
@@ -15,6 +16,7 @@ app.use(express.urlencoded({ limit: '50mb', extended: true }));
 app.use("/api/posts", postRoutes);
 app.use("/api/marketplace", marketRoutes);
 app.use("/api/iot", iotRoutes);
+app.use("/api/ai", aiRoutes);
 app.use("/api/auth", authRoutes);
 app.use("/api/weather", weatherRoutes);
 

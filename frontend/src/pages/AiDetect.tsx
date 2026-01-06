@@ -8,20 +8,52 @@ const AiDetect: React.FC = () => {
         solution: string;
     } | null>(null);
 
-    const handleFileUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const handleFileUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
         if (e.target.files && e.target.files[0]) {
-            setAnalyzing(true);
-            setResult(null); // Clear previous
+            try {
+                setAnalyzing(true);
+                setResult(null);
 
-            // Simulate API call
-            setTimeout(() => {
-                setResult({
-                    disease: "পাতা ব্লাইট রোগ শনাক্ত হয়েছে",
-                    confidence: "নির্ভুলতা: ৯২%",
-                    solution: "সমাধান: প্রতি লিটার পানিতে ৩ গ্রাম কপার অক্সিক্লোরাইড মিশিয়ে ৭ দিন পর পর স্প্রে করুন।"
+                const file = e.target.files[0];
+                const toDataUrl = (f: File) => new Promise<string>((resolve, reject) => {
+                    const reader = new FileReader();
+                    reader.onload = () => resolve(reader.result as string);
+                    reader.onerror = reject;
+                    reader.readAsDataURL(f);
                 });
+                const dataUrl = await toDataUrl(file);
+
+                const resp = await fetch('http://localhost:5000/api/ai/detect', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ image: dataUrl })
+                });
+                const json = await resp.json();
+                if (resp.ok) {
+                    const diseaseBn = json.topLabel ? json.topLabel : 'অজানা';
+                    const confPct = json.confidence ? Math.round(parseFloat(json.confidence) * 100) : 0;
+                    const solutionBn = json.advice || 'পরিষ্কার পানি দিয়ে পাতা ধুয়ে নিন, আক্রান্ত অংশ সরিয়ে ফেলুন এবং পর্যবেক্ষণ করুন।';
+                    setResult({
+                        disease: `${diseaseBn} শনাক্ত হয়েছে`,
+                        confidence: `নির্ভুলতা: ${confPct}%`,
+                        solution: `সমাধান: ${solutionBn}`
+                    });
+                } else {
+                    setResult({
+                        disease: 'বিশ্লেষণ ব্যর্থ',
+                        confidence: 'নির্ভুলতা: 0%',
+                        solution: 'সার্ভার সমস্যা বা ইমেজ সাপোর্ট নয়। পরে আবার চেষ্টা করুন।'
+                    });
+                }
+            } catch {
+                setResult({
+                    disease: 'বিশ্লেষণ ব্যর্থ',
+                    confidence: 'নির্ভুলতা: 0%',
+                    solution: 'ইন্টারনেট বা সার্ভার সমস্যা। পরে আবার চেষ্টা করুন।'
+                });
+            } finally {
                 setAnalyzing(false);
-            }, 1500);
+            }
         }
     };
 
@@ -29,7 +61,7 @@ const AiDetect: React.FC = () => {
         <main className="pt-24 pb-12 flex flex-col items-center min-h-screen">
             <div className="w-full max-w-2xl bg-white p-10 rounded-2xl shadow-sm border border-gray-100">
                 <h2 className="text-2xl font-bold mb-4 text-brand-dark flex items-center"><i className="fas fa-magic mr-3"></i>Crop Disease Doctor</h2>
-                <p className="mb-8 text-gray-600">Upload a clear photo of the affected leaf to detect diseases instantly.</p>
+                <p className="mb-8 text-gray-600">Upload a clear photo of the affected leaf to detect diseases instantly. Uses a free Hugging Face model when available.</p>
 
                 <div
                     className="border-2 border-dashed border-gray-300 rounded-xl p-12 text-center hover:bg-gray-50 transition cursor-pointer group"
