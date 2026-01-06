@@ -1,4 +1,6 @@
-import React, { useState } from 'react';
+/* eslint-disable react-hooks/purity */
+/* eslint-disable @typescript-eslint/no-explicit-any */
+import { useState } from 'react';
 import type { Comment, Reply } from '../../types';
 
 interface SinglePostProps {

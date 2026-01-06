@@ -104,7 +104,7 @@ const Dashboard: React.FC = () => {
             });
 
             if (res.ok) {
-                const savedUser = await res.json();
+                await res.json();
 
                 const newProfile: ExtendedUserProfile = {
                     ...userProfile,
