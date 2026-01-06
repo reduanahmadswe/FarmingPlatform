@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import React, { useState, useEffect } from 'react';
 
 interface WeatherData {
@@ -16,23 +17,6 @@ interface WeatherWidgetProps {
 const WeatherWidget: React.FC<WeatherWidgetProps> = ({ className = '', compact = false }) => {
     const [weather, setWeather] = useState<WeatherData | null>(null);
     const [loading, setLoading] = useState(true);
-    const [error, setError] = useState<string | null>(null);
-
-    useEffect(() => {
-        if (navigator.geolocation) {
-            navigator.geolocation.getCurrentPosition(
-                fetchWeather,
-                (err) => {
-                    console.error("Geolocation error:", err);
-                    // Fallback to a default location (e.g., Bogura)
-                    fetchWeather({ coords: { latitude: 24.8481, longitude: 89.3730 } } as any);
-                }
-            );
-        } else {
-            // Default fallback
-            fetchWeather({ coords: { latitude: 24.8481, longitude: 89.3730 } } as any);
-        }
-    }, []);
 
     const fetchWeather = async (position: GeolocationPosition) => {
         try {
@@ -88,6 +72,26 @@ const WeatherWidget: React.FC<WeatherWidgetProps> = ({ className = '', compact =
         if (code >= 80 && code <= 99) return { condition: 'Storm', icon: 'fa-bolt' };
         return { condition: 'Cloudy', icon: 'fa-cloud' };
     };
+
+    useEffect(() => {
+        const loadWeather = () => {
+            if (navigator.geolocation) {
+                navigator.geolocation.getCurrentPosition(
+                    fetchWeather,
+                    (err) => {
+                        console.error("Geolocation error:", err);
+                        // Fallback to a default location (e.g., Bogura)
+                        fetchWeather({ coords: { latitude: 24.8481, longitude: 89.3730 } } as any);
+                    }
+                );
+            } else {
+                // Default fallback
+                fetchWeather({ coords: { latitude: 24.8481, longitude: 89.3730 } } as any);
+            }
+        };
+
+        loadWeather();
+    }, []);
 
     if (loading) {
         return (
