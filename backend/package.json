@@ -8,6 +8,7 @@
     "start": "node dist/server.js",
     "dev": "nodemon -e ts --exec ts-node src/server.ts",
     "build": "tsc",
+    "postinstall": "npm run build",
     "seed:marketplace": "ts-node src/scripts/seedMarketplace.ts",
     "seed:user-test": "ts-node src/scripts/seedUserTestCrops.ts"
   },
