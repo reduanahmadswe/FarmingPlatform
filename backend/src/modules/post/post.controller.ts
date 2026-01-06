@@ -92,6 +92,21 @@ export const sharePost = async (req: Request, res: Response) => {
 export const deletePost = async (req: Request, res: Response) => {
     try {
         const { id } = req.params;
+        const requester = (req.body && (req.body.user || req.body.userId)) as string | undefined;
+
+        if (!requester) {
+            return res.status(400).json({ message: 'user (owner) is required to delete a post' });
+        }
+
+        const post = await postService.getPostById(id);
+        if (!post) {
+            return res.status(404).json({ message: 'Post not found' });
+        }
+
+        if (post.user !== requester) {
+            return res.status(403).json({ message: 'You can only delete your own posts' });
+        }
+
         await postService.deletePost(id);
         res.status(200).json({ message: 'Post deleted successfully' });
     } catch (error) {

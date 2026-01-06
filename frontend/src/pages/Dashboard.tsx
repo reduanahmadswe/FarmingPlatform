@@ -188,15 +188,15 @@ const Dashboard: React.FC = () => {
     };
 
     const handleDeletePost = async (id: string | number) => {
-        if (window.confirm("Delete this post?")) {
-            try {
-                await fetch(`http://localhost:5000/api/posts/${id}`, {
-                    method: 'DELETE'
-                });
-                loadMyPosts();
-            } catch (error) {
-                console.error("Error deleting post:", error);
-            }
+        try {
+            await fetch(`http://localhost:5000/api/posts/${id}`, {
+                method: 'DELETE',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ user: userProfile.name })
+            });
+            loadMyPosts();
+        } catch (error) {
+            console.error("Error deleting post:", error);
         }
     };
 

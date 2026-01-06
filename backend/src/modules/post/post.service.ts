@@ -1,7 +1,7 @@
 import Post, { IPost } from './post.model';
 
 export const createPost = async (data: Partial<IPost>): Promise<IPost> => {
-    return await Post.create(data);
+    return await Post.create(data as any);
 };
 
 export const getAllPosts = async (): Promise<IPost[]> => {
@@ -160,6 +160,14 @@ export const reactToComment = async (postId: string, commentId: string, userId: 
 
 export const deletePost = async (id: string): Promise<IPost | null> => {
     return await Post.findByIdAndDelete(id);
+};
+
+export const getPostById = async (id: string): Promise<IPost | null> => {
+    return await Post.findById(id);
+};
+
+export const updatePost = async (id: string, data: Partial<IPost>): Promise<IPost | null> => {
+    return await Post.findByIdAndUpdate(id, data, { new: true });
 };
 
 export const incrementShares = async (id: string): Promise<void> => {

@@ -220,6 +220,11 @@ const SinglePost = ({
     };
 
     const totalComments = countComments(post.commentsList);
+    const statusBadge = post.marketStatus ? (
+        <span className={`inline-flex items-center px-2 py-1 rounded-full text-[11px] font-bold border ${post.marketStatus === 'sold-out' ? 'bg-red-50 text-red-700 border-red-200' : 'bg-green-50 text-green-700 border-green-200'}`}>
+            {post.marketStatus === 'sold-out' ? 'Sold Out' : 'Available'}
+        </span>
+    ) : null;
 
     return (
         <div className="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden animate-fade-in relative z-0 mb-4 mx-1">
@@ -246,20 +251,30 @@ const SinglePost = ({
             </div>
 
             <div className="px-4 pb-2">
-                {post.text && <p className="text-gray-700 text-base leading-relaxed mb-3">{post.text}</p>}
+                <div className="flex items-start justify-between gap-2 mb-2">
+                    {post.text && <p className="text-gray-700 text-base leading-relaxed mb-1 flex-1">{post.text}</p>}
+                    {statusBadge}
+                </div>
 
                 {post.sharedPost ? (
                     <div className="border border-gray-200 rounded-xl overflow-hidden mt-2 mb-2">
-                        <div className="p-3 bg-gray-50 border-b border-gray-100 flex items-center space-x-2">
-                            {post.sharedPost.userAvatar ? (
-                                <img src={post.sharedPost.userAvatar} alt={post.sharedPost.user} className="h-8 w-8 rounded-full object-cover border border-gray-200" />
-                            ) : (
-                                <div className="h-8 w-8 bg-gray-200 rounded-full flex items-center justify-center font-bold text-xs text-gray-700">{(post.sharedPost.initial || 'U')}</div>
-                            )}
-                            <div>
-                                <h4 className="font-bold text-sm text-gray-900">{post.sharedPost.user}</h4>
-                                <p className="text-xs text-gray-500">{timeAgo(post.sharedPost.createdAt)}</p>
+                        <div className="p-3 bg-gray-50 border-b border-gray-100 flex items-center justify-between space-x-2">
+                            <div className="flex items-center space-x-2">
+                                {post.sharedPost.userAvatar ? (
+                                    <img src={post.sharedPost.userAvatar} alt={post.sharedPost.user} className="h-8 w-8 rounded-full object-cover border border-gray-200" />
+                                ) : (
+                                    <div className="h-8 w-8 bg-gray-200 rounded-full flex items-center justify-center font-bold text-xs text-gray-700">{(post.sharedPost.initial || 'U')}</div>
+                                )}
+                                <div>
+                                    <h4 className="font-bold text-sm text-gray-900">{post.sharedPost.user}</h4>
+                                    <p className="text-xs text-gray-500">{timeAgo(post.sharedPost.createdAt)}</p>
+                                </div>
                             </div>
+                            {post.sharedPost.marketStatus && (
+                                <span className={`inline-flex items-center px-2 py-1 rounded-full text-[10px] font-bold border ${post.sharedPost.marketStatus === 'sold-out' ? 'bg-red-50 text-red-700 border-red-200' : 'bg-green-50 text-green-700 border-green-200'}`}>
+                                    {post.sharedPost.marketStatus === 'sold-out' ? 'Sold Out' : 'Available'}
+                                </span>
+                            )}
                         </div>
                         <div className="p-3 bg-white">
                             <p className="text-gray-800 text-sm mb-2">{post.sharedPost.text}</p>

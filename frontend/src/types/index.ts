@@ -30,7 +30,7 @@ export interface Post {
     role: string;
     initial: string;
     color: string;
-    time: string;
+    time?: string;
     text: string;
     likes: number;
     isLiked: boolean;
@@ -40,6 +40,8 @@ export interface Post {
     mediaType?: 'image' | 'video' | null;
     mediaSrc?: string | null;
     sharedPost?: Post;
+    shares?: number;
+    marketStatus?: 'available' | 'sold-out';
     createdAt?: string; // Real backend date
 }
 
@@ -50,9 +52,15 @@ export interface UserProfile {
 }
 
 export interface Crop {
+    id?: string;
+    _id?: string;
     name: string;
     qty: number;
     price: number;
     icon: string;
     color: string;
+    contact: string;
+    notes?: string;
+    imageUrl?: string | null;
+    soldOut?: boolean;
 }

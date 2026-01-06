@@ -8,6 +8,10 @@ export const getAllCrops = async (): Promise<ICrop[]> => {
     return await Crop.find().sort({ createdAt: -1 });
 };
 
+export const getCropById = async (id: string): Promise<ICrop | null> => {
+    return await Crop.findById(id);
+};
+
 export const updateCrop = async (id: string, data: Partial<ICrop>): Promise<ICrop | null> => {
     return await Crop.findByIdAndUpdate(id, data, { new: true });
 };

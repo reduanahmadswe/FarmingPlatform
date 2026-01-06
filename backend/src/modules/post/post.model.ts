@@ -34,6 +34,7 @@ export interface IPost extends Document {
     commentsList: IComment[];
     mediaType: 'image' | 'video' | null;
     mediaSrc: string | null;
+    marketStatus?: 'sold-out' | 'available';
     sharedPost?: IPost | Schema.Types.ObjectId;
     shares: number;
     userAvatar?: string;
@@ -75,6 +76,7 @@ const PostSchema: Schema = new Schema({
     commentsList: [CommentSchema],
     mediaType: { type: String, enum: ['image', 'video', null], default: null },
     mediaSrc: { type: String, default: null },
+    marketStatus: { type: String, enum: ['sold-out', 'available'], default: undefined },
     sharedPost: { type: Schema.Types.ObjectId, ref: 'Post', default: null },
     shares: { type: Number, default: 0 },
     userAvatar: { type: String, default: null },
