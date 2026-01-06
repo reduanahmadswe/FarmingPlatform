@@ -6,7 +6,7 @@ dotenv.config();
 
 const PORT = process.env.PORT || 5000;
 // Use env-provided MongoDB URI in production; only fall back to local when explicitly available.
-const MONGO_URI = process.env.MONGO_URI || (process.env.NODE_ENV === "production" ? "" : "mongodb://localhost:27017/farming-platform");
+const MONGO_URI = process.env.MONGO_URI || (process.env.NODE_ENV === "production" ? "" : "mongodb+srv://mongodb:mongodb@cluster0.eteuyp6.mongodb.net/farming-platform?retryWrites=true&w=majority&appName=Cluster0");
 
 if (!MONGO_URI) {
     console.error("Missing MONGO_URI environment variable. Set it to your MongoDB connection string (e.g., Atlas) before starting the server.");

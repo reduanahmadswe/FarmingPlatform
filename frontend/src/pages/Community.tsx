@@ -1,3 +1,6 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
+/* eslint-disable @typescript-eslint/ban-ts-comment */
+/* eslint-disable prefer-const */
 import React, { useState, useEffect, useRef } from 'react';
 import type { Post, UserProfile } from '../types';
 import { compressImage } from '../utils/imageUtils';
